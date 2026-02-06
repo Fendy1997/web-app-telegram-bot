@@ -1,135 +1,123 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dating App</title>
+    <title>🔥 Знакомства</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
-            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
+        .app {
             background: white;
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .profile {
             text-align: center;
-            margin: 20px 0;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
-        
-        .profile-img {
-            width: 150px;
-            height: 150px;
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        .photo {
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 15px;
+            margin: 0 auto 20px;
+            display: block;
+            border: 5px solid #764ba2;
         }
-        
+        .name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+        }
+        .info {
+            color: #666;
+            margin: 10px 0;
+            font-size: 18px;
+        }
         .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
             margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
         }
-        
-        .btn {
+        button {
             padding: 15px 30px;
             font-size: 18px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
+            transition: 0.3s;
         }
-        
         .like {
-            background: #FF6B6B;
+            background: #FF4757;
             color: white;
         }
-        
         .dislike {
-            background: #4ECDC4;
+            background: #2ED573;
             color: white;
         }
-        
-        h1 {
-            color: #333;
-            text-align: center;
+        .like:hover, .dislike:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="app">
         <h1>🔥 Знакомства</h1>
         
-        <div class="profile">
-            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                 class="profile-img" 
-                 alt="Фото профиля">
-            <h2>Анна, 24</h2>
-            <p>Люблю путешествия, кофе и хорошие книги</p>
-            <p>📍 Москва</p>
-        </div>
+        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+             class="photo" 
+             alt="Фото">
+        
+        <div class="name">Анна</div>
+        <div class="info">24 года • Москва</div>
+        <div class="info">Люблю путешествия и кофе</div>
         
         <div class="buttons">
-            <button class="btn like" onclick="sendLike()">❤️ Лайк</button>
-            <button class="btn dislike" onclick="sendDislike()">👎 Дизлайк</button>
-        </div>
-        
-        <div style="text-align: center; margin-top: 20px;">
-            <button onclick="window.Telegram.WebApp.close()" 
-                    style="background: #999; color: white; padding: 10px 20px; border: none; border-radius: 10px;">
-                Закрыть
-            </button>
+            <button class="like" onclick="sendLike()">❤️ Лайк</button>
+            <button class="dislike" onclick="sendDislike()">👎 Дизлайк</button>
         </div>
     </div>
 
     <script>
-        // Telegram API
-        const tg = window.Telegram.WebApp;
-        
-        // Растягиваем на весь экран
-        tg.expand();
-        
-        // Получаем данные пользователя из Telegram
-        const user = tg.initDataUnsafe.user;
-        
-        // Если есть данные пользователя, можно их использовать
-        if (user) {
-            console.log("Привет, " + user.first_name);
+        // Проверяем, открыто ли в Telegram
+        if (typeof window.Telegram !== 'undefined' && window.Telegram.WebApp) {
+            const tg = window.Telegram.WebApp;
+            tg.expand(); // На весь экран
+            tg.ready(); // Готово к работе
         }
         
         function sendLike() {
-            // Отправляем данные в бота
-            tg.sendData(JSON.stringify({
-                action: 'like',
-                userId: user ? user.id : null,
-                timestamp: new Date().getTime()
-            }));
             alert('❤️ Лайк отправлен!');
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.sendData(JSON.stringify({action: 'like'}));
+                setTimeout(() => window.Telegram.WebApp.close(), 1000);
+            }
         }
         
         function sendDislike() {
-            tg.sendData(JSON.stringify({
-                action: 'dislike',
-                userId: user ? user.id : null,
-                timestamp: new Date().getTime()
-            }));
             alert('👎 Дизлайк отправлен!');
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.sendData(JSON.stringify({action: 'dislike'}));
+                setTimeout(() => window.Telegram.WebApp.close(), 1000);
+            }
         }
-        
-        // Когда приложение закрывается
-        tg.onEvent('viewportChanged', () => {
-            console.log('Приложение закрывается');
-        });
     </script>
 </body>
 </html>
